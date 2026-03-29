@@ -29,14 +29,24 @@ def greet_user():
     """Greet the user by name, and remember their name in a file."""
     path = Path('username.json')
     username = get_stored_username(path)
-    answer = input(f"are you{username}")
-    if username:
-        answer = input(f"are you {username}? (y/n) ")
-        if answer.lower() == 'y':
-            print(f"Welcome back, {username}!")
-        else:
-            username = get_new_username(path)
-            print(f"We'll remember you when you come back, {username}!")
+
+    if username is None:
+        username = get_new_username(path)
+        print(f"We'll remember you when you come back, {username}!")
+    else:
+        valid_answer = False
+        while not valid_answer:
+            answer = input(f"Is your name {username}? (y/n) ").strip().lower()
+            if answer == 'y':
+                print(f"Welcome back, {username}!")
+                valid_answer = True
+            elif answer == 'n':
+                username = get_new_username(path)
+                print(f"We'll remember you when you come back, {username}!")
+                valid_answer = True
+            else:
+                print("Please enter 'y' or 'n'.")
+
 
 
 greet_user()
